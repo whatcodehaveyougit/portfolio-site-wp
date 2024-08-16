@@ -1,0 +1,19 @@
+/**
+ * Theme Name: Sigurd Child
+ * Template:   twentytwentyfour
+ *
+ */
+
+
+ .project-single-container .tags {
+  border: 1px solid white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+ }
+
+ .taxonomy-pills li {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border: 1px solid white;
+  border-radius: 10px;
+ }
