@@ -19,46 +19,6 @@ add_action( 'wp_enqueue_scripts', 'enqueue_taxonomy_filter_script' );
 
 
 
-
-// add_filter('acf/shortcode/allow_in_block_themes_outside_content', '__return_true');
-// add_filter('the_content', 'do_shortcode');
-
-// function acf_custom_field_shortcode($atts) {
-// 	$atts = shortcode_atts(array(
-// 			'field' => '',
-// 			'post_id' => null,
-// 	), $atts, 'acf');
-
-// 	if (!empty($atts['field'])) {
-// 			return get_field($atts['field'], $atts['post_id']);
-// 	}
-
-// 	return '';
-// }
-// add_shortcode('acf', 'acf_custom_field_shortcode');
-
-// function register_acf_blocks() {
-// 	acf_register_block_type(array(
-// 			'name'              => 'custom-block',
-// 			'title'             => __('Custom Block'),
-// 			'render_callback'   => 'my_acf_block_render_callback',
-// 	));
-// }
-// add_action('acf/init', 'register_acf_blocks');
-
-// function my_acf_block_render_callback($block) {
-// 	$field_value = get_field('field_name');
-// 	echo '<div class="custom-block">'.$field_value.'</div>';
-// }
-
-
-// Display list of custom taxonomies in a template file or shortcode
-
-// Register the shortcode with the proper callback function
-// Register the shortcode
-// add_shortcode('display-taxes', 'get_all_taxonomy_terms_for_post_type');
-
-
 // This code did work but I want it to be AJAX powered
 function get_all_taxonomy_terms_for_post_type() {
 	$post_type = 'project';
@@ -67,6 +27,9 @@ function get_all_taxonomy_terms_for_post_type() {
 
 	if ( !empty($taxonomies) ) {
 			$html .= '<ul class="taxonomy-pills">';
+
+			// Add "View All" pill at the start
+			$html .= '<li><a href="#" class="taxonomy-term-link view-all" data-term-id="" data-taxonomy="">View All</a></li>';
 
 			foreach ( $taxonomies as $taxonomy ) {
 					$terms = get_terms( array(
@@ -89,6 +52,7 @@ function get_all_taxonomy_terms_for_post_type() {
 	return $html;
 }
 
+
 // Function to handle the AJAX request (already defined)
 function filter_projects_by_taxonomy_ajax() {
 	check_ajax_referer( 'filter_nonce', 'nonce' );
@@ -98,14 +62,18 @@ function filter_projects_by_taxonomy_ajax() {
 
 	$args = array(
 			'post_type' => 'project',
-			'tax_query' => array(
+	);
+
+	// If term_id and taxonomy are provided, filter by them
+	if ( !empty($term_id) && !empty($taxonomy) ) {
+			$args['tax_query'] = array(
 					array(
 							'taxonomy' => $taxonomy,
 							'field'    => 'term_id',
 							'terms'    => $term_id,
 					),
-			),
-	);
+			);
+	}
 
 	$query = new WP_Query( $args );
 
@@ -119,13 +87,15 @@ function filter_projects_by_taxonomy_ajax() {
 					echo '</div>';
 			}
 	} else {
-			echo '<p>No projects found for this term.</p>';
+			echo '<p>No projects found.</p>';
 	}
 
 	wp_reset_postdata();
 
 	wp_die(); // Required to terminate immediately and return a proper response
 }
+
+
 add_action( 'wp_ajax_filter_projects_by_taxonomy', 'filter_projects_by_taxonomy_ajax' );
 add_action( 'wp_ajax_nopriv_filter_projects_by_taxonomy', 'filter_projects_by_taxonomy_ajax' );
 
@@ -144,7 +114,7 @@ function filter_projects_by_taxonomy_shortcode() {
 	$html .= display_all_projects(); // Function to display all projects
 	$html .= '</div>';
 
-	// Include the AJAX script
+	// Include the AJAX script with animations and active class management
 	$html .= '<script type="text/javascript">
 	jQuery(document).ready(function($) {
 			$(".taxonomy-term-link").on("click", function(e) {
@@ -152,6 +122,12 @@ function filter_projects_by_taxonomy_shortcode() {
 
 					var term_id = $(this).data("term-id");
 					var taxonomy = $(this).data("taxonomy");
+
+					// Remove active class from all taxonomy terms
+					$(".taxonomy-term-link").removeClass("active");
+
+					// Add active class to the clicked taxonomy term
+					$(this).addClass("active");
 
 					$.ajax({
 							url: "' . admin_url( 'admin-ajax.php' ) . '",
@@ -163,14 +139,55 @@ function filter_projects_by_taxonomy_shortcode() {
 									nonce: "' . wp_create_nonce('filter_nonce') . '"
 							},
 							beforeSend: function() {
-									$(".projects-container").html("<p>Loading...</p>"); // Show a loading message or spinner
+									$(".projects-container").fadeOut(300, function() {
+											$(this).html("<p>Loading...</p>").fadeIn(300); // Show a loading message with fade effect
+									});
 							},
 							success: function(response) {
-									$(".projects-container").html(response); // Update the content with the filtered posts
+									$(".projects-container").fadeOut(300, function() {
+											$(this).html(response).fadeIn(300); // Update the content with the filtered posts and add fade effect
+									});
 							},
 							error: function(xhr, status, error) {
 									console.log("AJAX Error:", error);
-									$(".projects-container").html("<p>There was an error loading the projects. Please try again.</p>");
+									$(".projects-container").fadeOut(300, function() {
+											$(this).html("<p>There was an error loading the projects. Please try again.</p>").fadeIn(300);
+									});
+							}
+					});
+			});
+
+			// Handle "View All" pill click
+			$(".taxonomy-terms").on("click", ".view-all", function(e) {
+					e.preventDefault();
+
+					// Remove active class from all taxonomy terms
+					$(".taxonomy-term-link").removeClass("active");
+
+					$.ajax({
+							url: "' . admin_url( 'admin-ajax.php' ) . '",
+							type: "POST",
+							data: {
+									action: "filter_projects_by_taxonomy",
+									term_id: "",
+									taxonomy: "",
+									nonce: "' . wp_create_nonce('filter_nonce') . '"
+							},
+							beforeSend: function() {
+									$(".projects-container").fadeOut(300, function() {
+											$(this).html("<p>Loading...</p>").fadeIn(300);
+									});
+							},
+							success: function(response) {
+									$(".projects-container").fadeOut(300, function() {
+											$(this).html(response).fadeIn(300);
+									});
+							},
+							error: function(xhr, status, error) {
+									console.log("AJAX Error:", error);
+									$(".projects-container").fadeOut(300, function() {
+											$(this).html("<p>There was an error loading the projects. Please try again.</p>").fadeIn(300);
+									});
 							}
 					});
 			});
@@ -179,6 +196,8 @@ function filter_projects_by_taxonomy_shortcode() {
 
 	return $html;
 }
+
+
 function display_all_projects() {
 	$args = array(
 			'post_type' => 'project',
