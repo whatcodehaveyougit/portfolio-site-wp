@@ -1,0 +1,64 @@
+.project-single-container .tags {
+  padding: 1rem 2rem;
+  border-radius: 10px;
+}
+
+ul.taxonomy-pills {
+  padding-left: 0px;
+}
+
+.taxonomy-pills li {
+  display: inline-block;
+  padding: 1.5rem 2rem 1.5rem 0rem;
+}
+
+.taxonomy-term-link:focus {
+  outline: none; /* Remove outline on focus */
+}
+
+.taxonomy-pills li:hover {
+  text-decoration: underline;
+}
+
+.taxonomy-term-link {
+  text-decoration: none;
+}
+
+.taxonomy-term-link.active {
+  font-weight: bold;
+  text-decoration: underline;
+  color: black;
+}
+
+.project-tile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.project-tile-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Black background with 50% opacity */
+  color: white;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.overlay h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.projects-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}

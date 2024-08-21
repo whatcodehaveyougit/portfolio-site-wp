@@ -5,6 +5,9 @@ add_action( 'wp_enqueue_scripts', 'twentytwentyfour_child_scripts' );
 function twentytwentyfour_child_scripts() {
 	wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
   wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ) );
+
+	wp_enqueue_style( 'minified-child-theme-css', get_stylesheet_directory_uri() . '/dist/css/style.css', array(), 1.4 );
+	wp_enqueue_script('minified-child-theme-js',  get_stylesheet_directory_uri() . '/dist/js/scripts.js', [], 1.0, true);
 }
 
 function enqueue_taxonomy_filter_script() {
@@ -77,13 +80,16 @@ function filter_projects_by_taxonomy_ajax() {
 
 	$query = new WP_Query( $args );
 
+
 	if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 					$query->the_post();
-					// Customize the output as needed
-					echo '<div class="project">';
+					echo '<div class="project-tile-container">';
 					echo '<h2>' . get_the_title() . '</h2>';
-					echo '<div>' . get_the_post_thumbnail( get_the_ID(), 'medium' ) . '</div>';
+					echo '<img src='. get_the_post_thumbnail( get_the_ID(), 'medium' ) . ' alt="Your Image">';
+					echo '<div class="overlay">';
+					echo '<h2>Your Title Here</h2>';
+					echo '</div>';
 					echo '</div>';
 			}
 	} else {

@@ -5,27 +5,3 @@
  */
 
 
- .project-single-container .tags {
-  padding: 1rem 2rem;
-  border-radius: 10px;
- }
-
- .taxonomy-pills li {
-  display: inline-block;
-  padding: 1rem 2rem;
- }
-
- .taxonomy-term-link {
-  text-decoration: none;
- }
-
- .taxonomy-term-link.active {
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-
- .projects-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
- }
