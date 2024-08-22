@@ -1,64 +1,62 @@
-.project-single-container .tags {
-  padding: 1rem 2rem;
-  border-radius: 10px;
-}
+.projects-page-container {
+  ul.taxonomy-pills {
+    padding-left: 1px;
+  }
 
-ul.taxonomy-pills {
-  padding-left: 0px;
-}
+  ul.taxonomy-pills li {
+    display: inline-block;
+    padding: 1.5rem 2rem 1.5rem 0rem;
+  }
+  ul.taxonomy-pills li:hover {
+    text-decoration: underline;
+  }
+  .taxonomy-term-link:focus {
+    outline: none;
+  }
 
-.taxonomy-pills li {
-  display: inline-block;
-  padding: 1.5rem 2rem 1.5rem 0rem;
-}
+  .taxonomy-pills .taxonomy-term-link {
+    text-decoration: none;
+  }
+  .taxonomy-term-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+    color: black;
+  }
+  .projects-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    transition: opacity 0.5s ease-in-out; /* Change 0.5s to your desired duration */
+    opacity: 1;
+  }
+  .projects-container.fade-out {
+    opacity: 0;
+  }
 
-.taxonomy-term-link:focus {
-  outline: none; /* Remove outline on focus */
-}
-
-.taxonomy-pills li:hover {
-  text-decoration: underline;
-}
-
-.taxonomy-term-link {
-  text-decoration: none;
-}
-
-.taxonomy-term-link.active {
-  font-weight: bold;
-  text-decoration: underline;
-  color: black;
-}
-
-.project-tile-container {
-  position: relative;
-  display: inline-block;
-}
-
-.project-tile-container img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Black background with 50% opacity */
-  color: white;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.overlay h2 {
-  margin: 0;
-  font-size: 18px;
-  line-height: 1.4;
-}
-
-.projects-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  .projects-container.fade-in {
+    opacity: 1;
+  }
+  .project-tile-container {
+    position: relative;
+    display: inline-block;
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Black background with 50% opacity */
+      color: white;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .overlay h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+  }
+  .project-tile-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
 }

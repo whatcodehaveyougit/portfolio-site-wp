@@ -6,8 +6,11 @@ function twentytwentyfour_child_scripts() {
 	wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
   wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ) );
 
-	wp_enqueue_style( 'minified-child-theme-css', get_stylesheet_directory_uri() . '/dist/css/style.css', array(), 1.4 );
-	wp_enqueue_script('minified-child-theme-js',  get_stylesheet_directory_uri() . '/dist/js/scripts.js', [], 1.0, true);
+	// wp_enqueue_style( 'minified-child-theme-css', get_stylesheet_directory_uri() . '/dist/css/style.css', array(), 1.4 );
+	// wp_enqueue_script('minified-child-theme-js',  get_stylesheet_directory_uri() . '/dist/js/scripts.js', [], 1.0, true);
+
+	wp_enqueue_style( 'parcel', get_stylesheet_directory_uri() . '/dist/styles/style.css', array(), '1.0' );
+	wp_enqueue_script( 'parcel', get_stylesheet_directory_uri() . '/dist/scripts/scripts.js', array(), '1.0', true );
 }
 
 function enqueue_taxonomy_filter_script() {
@@ -85,10 +88,9 @@ function filter_projects_by_taxonomy_ajax() {
 			while ( $query->have_posts() ) {
 					$query->the_post();
 					echo '<div class="project-tile-container">';
-					echo '<h2>' . get_the_title() . '</h2>';
-					echo '<img src='. get_the_post_thumbnail( get_the_ID(), 'medium' ) . ' alt="Your Image">';
+					echo '<img src='. get_the_post_thumbnail( get_the_ID(), 'medium' ) . ' alt=' . get_the_title() . '>';
 					echo '<div class="overlay">';
-					echo '<h2>Your Title Here</h2>';
+					echo '<h2>' . get_the_title() . '</h2>';
 					echo '</div>';
 					echo '</div>';
 			}
@@ -216,17 +218,16 @@ function display_all_projects() {
 	if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 					$query->the_post();
-					$html .= '<div class="project">';
-					$html .= '<h2>' . get_the_title() . '</h2>';
+					$thumbnail_html = get_the_post_thumbnail(get_the_ID(), 'medium');
+					$title = get_the_title();
+					$escaped_title = esc_attr($title);
 
-					// Display the featured image
-					if ( has_post_thumbnail() ) {
-							$html .= '<div>' . get_the_post_thumbnail( get_the_ID(), 'medium' ) . '</div>';
-					} else {
-							$html .= '<div><p>No image available</p></div>';
-					}
-
-					$html .= '</div>';
+					$html .= '<div class="project-tile-container">';
+					$html = '<img src="' . esc_url($thumbnail_html) . '" alt="' . $escaped_title . '">';
+					$html .=  '<div class="overlay">';
+					$html .=  '<h2>' . get_the_title() . '</h2>';
+					$html .=  '</div>';
+					$html .=  '</div>';
 			}
 	} else {
 			$html .= '<p>No projects found.</p>';
