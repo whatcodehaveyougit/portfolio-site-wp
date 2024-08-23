@@ -1,0 +1,118 @@
+/* Hamburger Mobile Navigation */
+
+.wp-block-navigation.echo-primary-nav--mobile
+  .wp-block-navigation__responsive-container.is-menu-open {
+  background-color: #ff5500;
+}
+
+// .wp-block-navigation__responsive-dialog {
+//   display: flex;
+//   justify-content: center;
+// }
+
+.wp-block-navigation__responsive-container.is-menu-open.has-modal-open
+  .wp-block-navigation__responsive-container-content
+  .wp-block-navigation__container {
+  align-items: center;
+}
+
+.wp-block-navigation:not(.has-background) .wp-block-navigation__responsive-container.is-menu-open {
+  background-color: #ff5500;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__responsive-container-content {
+  align-items: center;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__responsive-container-content
+  .wp-block-navigation__container {
+  align-items: center;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__responsive-container-content
+  .wp-block-navigation-item {
+  align-items: center;
+  color: white !important;
+  padding-bottom: 0.4rem;
+}
+
+.wp-block-navigation__responsive-container.has-modal-open.is-menu-open {
+  max-width: 85%;
+}
+
+.wp-block-woocommerce-mini-cart {
+  visibility: visible !important;
+}
+
+.wp-block-navigation__responsive-container-close {
+  // display: none;
+  // position: static;
+  color: white;
+}
+
+.wp-block-navigation__responsive-container-close:focus {
+  outline: 0px !important;
+  outline: none !important;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+  ul.wp-block-navigation__container
+  > li
+  > a.wp-block-navigation-item__content {
+  font-size: 32px !important;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+  ul.wp-block-navigation__container
+  > li.wp-block-navigation-item
+  > a
+  > span.wp-block-navigation-item__label {
+  font-size: 32px;
+}
+
+ul.wp-block-navigation__submenu-container
+  li.wp-block-navigation-item
+  .wp-block-navigation-item__label {
+  text-transform: uppercase;
+  font-family: var(--wp--preset--font-family--work-sans);
+}
+
+@media (max-width: 600px) {
+  header .navigation-row-container form {
+    display: none;
+  }
+  .basket-icon-wrapper p,
+  .account-icon-wrapper p {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 781px) {
+  .echo-primary-nav--desktop ul {
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+  body header .echo-primary-nav--desktop {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 40 vw;
+  }
+  .wp-block-navigation.echo-primary-nav--mobile {
+    display: none;
+  }
+}
+@media screen and (max-width: 781px) {
+  .wp-block-navigation.echo-primary-nav--desktop {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .navigation-row-container nav {
+    max-width: 65%;
+  }
+}

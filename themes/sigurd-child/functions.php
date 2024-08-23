@@ -14,7 +14,6 @@ function twentytwentyfour_child_scripts() {
 }
 
 function enqueue_taxonomy_filter_script() {
-	wp_enqueue_script( 'taxonomy-filter', get_template_directory_uri() . '/js/taxonomy-filter.js', array('jquery'), null, true );
 	// Localize the script with admin-ajax.php and a nonce
 	wp_localize_script( 'taxonomy-filter', 'ajax_obj', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -59,19 +58,53 @@ function get_all_taxonomy_terms_for_post_type() {
 }
 
 
-// Function to handle the AJAX request (already defined)
-function filter_projects_by_taxonomy_ajax() {
-	check_ajax_referer( 'filter_nonce', 'nonce' );
+function display_all_projects() {
+	$args = array(
+			'post_type' => 'project',
+			'posts_per_page' => -1 // Display all posts
+	);
 
-	$term_id = intval( $_POST['term_id'] );
-	$taxonomy = sanitize_text_field( $_POST['taxonomy'] );
+	$query = new WP_Query($args);
+	$html = '';
+
+	if ($query->have_posts()) {
+			while ($query->have_posts()) {
+					$query->the_post();
+					$thumbnail_html = get_the_post_thumbnail(get_the_ID(), 'medium'); // Get the thumbnail HTML
+					$title = get_the_title();
+					$escaped_title = esc_attr($title);
+					$permalink = get_the_permalink(); // Get the URL of the project
+
+					$html .= '<div class="project-tile-container">';
+					$html .= '<a href="' . esc_url($permalink) . '" title="' . $escaped_title . '">';
+					$html .= $thumbnail_html; // Include the thumbnail within the link
+					$html .= '</a>';
+					$html .= '<div class="overlay">';
+					$html .= '<h2>' . esc_html($title) . '</h2>';
+					$html .= '</div>';
+					$html .= '</div>';
+			}
+	} else {
+			$html .= '<p>No projects found.</p>';
+	}
+
+	wp_reset_postdata();
+
+	return $html;
+}
+
+
+function filter_projects_by_taxonomy_ajax() {
+	check_ajax_referer('filter_nonce', 'nonce');
+
+	$term_id = intval($_POST['term_id']);
+	$taxonomy = sanitize_text_field($_POST['taxonomy']);
 
 	$args = array(
 			'post_type' => 'project',
 	);
 
-	// If term_id and taxonomy are provided, filter by them
-	if ( !empty($term_id) && !empty($taxonomy) ) {
+	if (!empty($term_id) && !empty($taxonomy)) {
 			$args['tax_query'] = array(
 					array(
 							'taxonomy' => $taxonomy,
@@ -81,33 +114,15 @@ function filter_projects_by_taxonomy_ajax() {
 			);
 	}
 
-	$query = new WP_Query( $args );
-
-
-	if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-					$query->the_post();
-					echo '<div class="project-tile-container">';
-					echo '<img src='. get_the_post_thumbnail( get_the_ID(), 'medium' ) . ' alt=' . get_the_title() . '>';
-					echo '<div class="overlay">';
-					echo '<h2>' . get_the_title() . '</h2>';
-					echo '</div>';
-					echo '</div>';
-			}
-	} else {
-			echo '<p>No projects found.</p>';
-	}
-
-	wp_reset_postdata();
+	// Use the same function to display the filtered projects
+	echo display_all_projects($args);
 
 	wp_die(); // Required to terminate immediately and return a proper response
 }
 
+add_action('wp_ajax_filter_projects_by_taxonomy', 'filter_projects_by_taxonomy_ajax');
+add_action('wp_ajax_nopriv_filter_projects_by_taxonomy', 'filter_projects_by_taxonomy_ajax');
 
-add_action( 'wp_ajax_filter_projects_by_taxonomy', 'filter_projects_by_taxonomy_ajax' );
-add_action( 'wp_ajax_nopriv_filter_projects_by_taxonomy', 'filter_projects_by_taxonomy_ajax' );
-
-// Shortcode function to display taxonomy terms and filtered projects
 function filter_projects_by_taxonomy_shortcode() {
 	// Get the taxonomy terms
 	$terms_html = get_all_taxonomy_terms_for_post_type();
@@ -119,7 +134,7 @@ function filter_projects_by_taxonomy_shortcode() {
 
 	// Display all posts by default
 	$html .= '<div class="projects-container">';
-	$html .= display_all_projects(); // Function to display all projects
+	$html .= display_all_projects(); // Use the function to display all projects
 	$html .= '</div>';
 
 	// Include the AJAX script with animations and active class management
@@ -138,7 +153,7 @@ function filter_projects_by_taxonomy_shortcode() {
 					$(this).addClass("active");
 
 					$.ajax({
-							url: "' . admin_url( 'admin-ajax.php' ) . '",
+							url: "' . admin_url('admin-ajax.php') . '",
 							type: "POST",
 							data: {
 									action: "filter_projects_by_taxonomy",
@@ -173,7 +188,7 @@ function filter_projects_by_taxonomy_shortcode() {
 					$(".taxonomy-term-link").removeClass("active");
 
 					$.ajax({
-							url: "' . admin_url( 'admin-ajax.php' ) . '",
+							url: "' . admin_url('admin-ajax.php') . '",
 							type: "POST",
 							data: {
 									action: "filter_projects_by_taxonomy",
@@ -205,37 +220,133 @@ function filter_projects_by_taxonomy_shortcode() {
 	return $html;
 }
 
+add_shortcode('filter_projects', 'filter_projects_by_taxonomy_shortcode');
 
-function display_all_projects() {
-	$args = array(
-			'post_type' => 'project',
-			'posts_per_page' => -1 // Display all posts
-	);
 
-	$query = new WP_Query( $args );
-	$html = '';
 
-	if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-					$query->the_post();
-					$thumbnail_html = get_the_post_thumbnail(get_the_ID(), 'medium');
-					$title = get_the_title();
-					$escaped_title = esc_attr($title);
+// function modify_navigation_block_output($block_content, $block) {
+// 	// Check if the block is a navigation block
+// 	// if ($block['blockName'] === 'core/navigation' && $block['attrs']['className'] === 'primary-nav--mobile') {
+// 	 if ($block['blockName'] === 'core/navigation') {
+// 			// Convert block attributes to HTML
+// 			$block_attributes = '';
+// 			if (!empty($block['attrs']) && is_array($block['attrs'])) {
+// 					foreach ($block['attrs'] as $attr_key => $attr_value) {
+// 							$block_attributes .= ' ' . esc_attr($attr_key) . '="' . esc_attr($attr_value) . '"';
+// 					}
+// 			}
 
-					$html .= '<div class="project-tile-container">';
-					$html = '<img src="' . esc_url($thumbnail_html) . '" alt="' . $escaped_title . '">';
-					$html .=  '<div class="overlay">';
-					$html .=  '<h2>' . get_the_title() . '</h2>';
-					$html .=  '</div>';
-					$html .=  '</div>';
-			}
-	} else {
-			$html .= '<p>No projects found.</p>';
-	}
+// 		 // Your custom HTML
+// 		 $custom_html = '<div class="mobile-menu-top-bar">
+// 		 <div></div>
+// 		 <button aria-label="Close menu" class="wp-block-navigation__responsive-container-close" data-wp-on--click="actions.closeMenuOnClick" style="display: block;">
+// 		 <img src="https://echo-3.co.uk/wp-content/uploads/2024/05/close-icon-mobile-menu.webp"/>
+// 		 </button>
+// 		 </div>';
 
-	wp_reset_postdata();
+// 		 // Find the position of the first occurrence of <ul> tag
+// 		 $ul_position = strpos($block_content, '<ul');
 
-	return $html;
-}
+// 		 // Insert custom HTML before the <ul> tag
+// 		 if ($ul_position !== false) {
+// 				 $block_content = substr_replace($block_content, $custom_html, $ul_position, 0);
+// 		 } else {
+// 				 // Log if <ul> tag is not found
+// 				 error_log('Navigation Block: <ul> tag not found');
+// 		 }
+// 	}
 
-add_shortcode( 'filter_projects', 'filter_projects_by_taxonomy_shortcode' );
+// 	return $block_content;
+// }
+// add_filter('render_block', 'modify_navigation_block_output', 10, 2);
+
+// function register_project_features_taxonomy() {
+// 	// Add new taxonomy, make it hierarchical like categories
+// 	$labels = array(
+// 			'name'              => _x('Features', 'taxonomy general name', 'textdomain'),
+// 			'singular_name'     => _x('Feature', 'taxonomy singular name', 'textdomain'),
+// 			'search_items'      => __('Search Features', 'textdomain'),
+// 			'all_items'         => __('All Features', 'textdomain'),
+// 			'parent_item'       => __('Parent Feature', 'textdomain'),
+// 			'parent_item_colon' => __('Parent Feature:', 'textdomain'),
+// 			'edit_item'         => __('Edit Feature', 'textdomain'),
+// 			'update_item'       => __('Update Feature', 'textdomain'),
+// 			'add_new_item'      => __('Add New Feature', 'textdomain'),
+// 			'new_item_name'     => __('New Feature Name', 'textdomain'),
+// 			'menu_name'         => __('Features', 'textdomain'),
+// 	);
+
+// 	$args = array(
+// 			'hierarchical'      => true, // Make it hierarchical (like categories)
+// 			'labels'            => $labels,
+// 			'show_ui'           => true,
+// 			'show_admin_column' => true,
+// 			'query_var'         => true,
+// 			'rewrite'           => array('slug' => 'features'),
+// 	);
+
+// 	// Register the taxonomy for the 'project' post type
+// 	register_taxonomy('features', array('project'), $args);
+// }
+
+// add_action('init', 'register_project_features_taxonomy');
+
+
+
+
+// function display_project_features_shortcode($atts) {
+// 	// Ensure the global $post object is available
+// 	global $post;
+
+// 	// Debugging: Check if the post object is available
+// 	if (empty($post)) {
+// 			return '<p>No global post object available.</p>';
+// 	}
+
+// 	// Debugging: Output the post type
+// 	$output = '<p>Post Type: ' . get_post_type($post) . '</p>';
+
+// 	// Verify that we're inside a project post type
+// 	if (get_post_type($post) != 'project') {
+// 			return '<p>This shortcode is only applicable to the project post type.</p>';
+// 	}
+
+// 	// Define the taxonomy you want to display
+// 	$taxonomy = 'features'; // Update to your actual taxonomy slug
+
+// 	// Initialize output
+// 	$output .= '<p>Displaying taxonomy terms for: ' . esc_html($taxonomy) . '</p>';
+
+// 	// Get terms for the current post
+// 	$terms = wp_get_post_terms($post->ID, $taxonomy);
+
+// 	// Check if terms is a WP_Error object
+// 	if (is_wp_error($terms)) {
+// 			$error_message = $terms->get_error_message();
+// 			$output .= '<p>Error fetching terms for taxonomy: ' . esc_html($taxonomy) . ' - ' . esc_html($error_message) . '</p>';
+// 			return $output; // Return the error message and stop execution
+// 	}
+
+// 	// Check if there are terms available
+// 	if (!empty($terms)) {
+// 			// Get the taxonomy object to retrieve its labels
+// 			$taxonomy_obj = get_taxonomy($taxonomy);
+// 			var_export($taxonomy_obj);
+// 			$output .= '<h3>' . esc_html($taxonomy_obj->labels->singular_name) . '</h3>';
+// 			$output .= '<ul class="project-taxonomy-list">';
+
+// 			// Loop through each term and display it
+// 			foreach ($terms as $term) {
+// 					$output .= '<li>' . esc_html($term->name) . '</li>';
+// 			}
+
+// 			$output .= '</ul>';
+// 	} else {
+// 			$output .= '<p>No terms found for taxonomy: ' . esc_html($taxonomy) . '</p>';
+// 	}
+
+// 	return $output;
+// }
+
+// // Register the shortcode with WordPress
+// add_shortcode('project_features', 'display_project_features_shortcode');
