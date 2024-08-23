@@ -1,0 +1,30 @@
+.project-page {
+  .project-features ul {
+    padding: 0px;
+    li {
+      border-radius: 4px;
+      border: 1px solid var(--Light-Medium-Grey, #d4d4d4);
+      opacity: var(--sds-size-stroke-border);
+      list-style: none;
+      display: inline-block;
+      // padding: 4px var(--sds-size-space-200);
+      padding: 4px 8px;
+      a {
+        color: var(--Dark-Grey, #171717);
+        /* Paragraph */
+        font-family: var(--wp--preset--font-family--inter-18-pt);
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 21px; /* 131.25% */
+        text-decoration: none;
+      }
+    }
+  }
+  .header {
+    align-items: flex-start;
+  }
+  .project-link-btn {
+    background: var(--Primary-Blue, #004eaa);
+  }
+}

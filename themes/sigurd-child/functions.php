@@ -58,6 +58,7 @@ function get_all_taxonomy_terms_for_post_type() {
 }
 
 
+// Correct one that is not doing the right link
 function display_all_projects($args = array()) {
 	$default_args = array(
 			'post_type' => 'project',
@@ -74,6 +75,7 @@ function display_all_projects($args = array()) {
 					$thumbnail_html = get_the_post_thumbnail(get_the_ID(), 'medium');
 					$title = get_the_title();
 					$escaped_title = esc_attr($title);
+					$permalink = get_the_permalink(); // Get the URL of the project
 
 					$html .= '<div class="project-tile-container">';
 					$html .= '<a href="' . esc_url($permalink) . '" title="' . $escaped_title . '">';
@@ -92,6 +94,7 @@ function display_all_projects($args = array()) {
 
 	return $html;
 }
+
 
 
 function filter_projects_by_taxonomy_ajax() {
@@ -246,7 +249,6 @@ function display_project_features() {
 
 	if ( $terms && ! is_wp_error( $terms ) && ! empty( $terms ) ) {
 			$html = '<div class="project-features">';
-			$html .= '<h3>Features:</h3>';
 			$html .= '<ul>';
 
 			foreach ( $terms as $term ) {
@@ -266,3 +268,21 @@ function display_project_features() {
 }
 
 add_shortcode( 'project_features', 'display_project_features' );
+
+
+function project_link_button_shortcode() {
+	// Get the ACF field value for 'project_link'
+	$project_link = get_field('project_link');
+
+	// Check if the project_link is not empty
+	if ($project_link) {
+			// Return button HTML
+			return '<a href="' . esc_url($project_link) . '"
+			class="wp-block-button__link has-contrast-color has-text-color project-link-btn has-link-color wp-element-button"
+			target="_blank"
+			rel="noopener noreferrer">Open Project<img src="http://localhost:10018/wp-content/themes/sigurd-child/assets/svgs/open.svg" /></a>';
+	}
+}
+
+// Register the shortcode with WordPress
+add_shortcode('project_link_button', 'project_link_button_shortcode');

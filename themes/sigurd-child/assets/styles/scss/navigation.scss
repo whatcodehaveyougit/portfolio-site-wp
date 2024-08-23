@@ -1,3 +1,24 @@
+.wp-block-site-title {
+  color: var(--Dark-Grey, #171717);
+  font-family: Junge;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 48.829px; /* 152.59% */
+}
+
+.wp-block-navigation .wp-block-navigation-item__label {
+  font-family: var(--wp--preset--font-family--inter-18-pt);
+  color: var(--Medium-Grey, #626262);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.site-headings p:nth-child(2) {
+  font-family: var(--wp--preset--font-family--inter-18-pt);
+}
 /* Hamburger Mobile Navigation */
 
 .wp-block-navigation.echo-primary-nav--mobile

@@ -38,6 +38,8 @@
   .project-tile-container {
     position: relative;
     display: inline-block;
+    height: 195px;
+    overflow: hidden;
     .overlay {
       position: absolute;
       bottom: 0;
