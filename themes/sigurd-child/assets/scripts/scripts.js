@@ -1,1 +1,1 @@
-import './jquery/taxonomy-filter.js';
+import './js/taxonomy-filter.js';
