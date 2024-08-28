@@ -584,9 +584,9 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"5C2sm":[function(require,module,exports) {
-var _taxonomyFilterJs = require("./jquery/taxonomy-filter.js");
+var _taxonomyFilterJs = require("./js/taxonomy-filter.js");
 
-},{"./jquery/taxonomy-filter.js":"fUl8b"}],"fUl8b":[function(require,module,exports) {
+},{"./js/taxonomy-filter.js":"cnXGo"}],"cnXGo":[function(require,module,exports) {
 document.addEventListener("DOMContentLoaded", function() {
     const termLinks = document.querySelectorAll(".taxonomy-term-link");
     termLinks.forEach(function(link) {

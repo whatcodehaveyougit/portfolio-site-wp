@@ -1,23 +1,39 @@
+@import './variables.scss';
+
 .wp-block-site-title {
   color: var(--Dark-Grey, #171717);
   font-family: Junge;
   font-size: 32px;
   font-style: normal;
   font-weight: 400;
-  line-height: 48.829px; /* 152.59% */
+  line-height: 48.829px;
+  a {
+    text-decoration: none;
+  }
+}
+
+.wp-block-navigation .wp-block-navigation-item__label {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .wp-block-navigation .wp-block-navigation-item__label {
   font-family: var(--wp--preset--font-family--inter-18-pt);
-  color: var(--Medium-Grey, #626262);
+  color: $medium-grey;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
 }
 
-.site-headings p:nth-child(2) {
-  font-family: var(--wp--preset--font-family--inter-18-pt);
+body header .site-headings p:nth-child(2) {
+  font-family: var(--wp--preset--font-family--inter-18-pt) !important;
+}
+
+header .header-row-container {
+  border-bottom: 1px solid $light-grey;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 /* Hamburger Mobile Navigation */
 

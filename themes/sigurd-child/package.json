@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -r assets/dist/",
-    "watch": "parcel watch assets/styles/style.scss assets/scripts/scripts.js",
+    "watch": "parcel watch assets/scripts/scripts.js assets/styles/style.scss",
     "build": "parcel build assets/scripts/scripts.js assets/styles/style.scss"
   },
   "author": "",

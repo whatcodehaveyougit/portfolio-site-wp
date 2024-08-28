@@ -1,7 +1,9 @@
+@import './variables.scss';
+
 .services-container {
   .wp-block-column > div,
   .wp-block-column > div:nth-child(2) {
-    border: 1px solid var(--Light-Medium-Grey, #d4d4d4);
+    border: 1px solid $light-grey;
     height: 100%;
     border-radius: 4px;
     padding: 40px 48px;

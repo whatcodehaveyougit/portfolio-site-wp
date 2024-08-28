@@ -1,0 +1,35 @@
+.projects-page-container {
+  .taxonomy-term-link:focus {
+    outline: none;
+  }
+  .projects-container {
+    // display: grid;
+    // grid-template-columns: 1fr 1fr 1fr;
+    transition: opacity 0.5s ease-in-out; /* Change 0.5s to your desired duration */
+    opacity: 1;
+  }
+  .projects-container.fade-out {
+    opacity: 0;
+  }
+  .projects-container.fade-in {
+    opacity: 1;
+  }
+  /* Container that spans the full width of the screen */
+  .project-card-container {
+    width: 100%;
+    padding: 1rem; /* Adds padding around the card */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+  }
+
+  /* Card styling */
+  .project-card {
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center vertically within the card */
+    justify-content: space-between; /* Space between the title and the image */
+    background-color: #ffffff; /* Card background color */
+    border: 1px solid #ddd; /* Border around the card */
+    border-radius: 8px; /* Rounded corners for the card */
+    padding: 1rem; /* Padding inside the card */
+    box-shadow: 0 2px 4px rgba;
+  }
+}

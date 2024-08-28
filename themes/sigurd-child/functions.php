@@ -34,7 +34,7 @@ function get_all_taxonomy_terms_for_post_type() {
 			$html .= '<ul class="taxonomy-pills">';
 
 			// Add "View All" pill at the start
-			$html .= '<li><a href="#" class="taxonomy-term-link view-all" data-term-id="" data-taxonomy="">View All</a></li>';
+			$html .= '<li class="pill-outline"><a href="#" class="taxonomy-term-link view-all" data-term-id="" data-taxonomy="">View All</a></li>';
 
 			foreach ( $taxonomies as $taxonomy ) {
 					$terms = get_terms( array(
@@ -44,7 +44,7 @@ function get_all_taxonomy_terms_for_post_type() {
 
 					if ( !empty($terms) && !is_wp_error($terms) ) {
 							foreach ( $terms as $term ) {
-									$html .= '<li><a href="#" class="taxonomy-term-link" data-term-id="' . esc_attr( $term->term_id ) . '" data-taxonomy="' . esc_attr( $taxonomy->name ) . '">' . esc_html( $term->name ) . '</a></li>';
+									$html .= '<li class="pill-outline"><a href="#" class="taxonomy-term-link" data-term-id="' . esc_attr( $term->term_id ) . '" data-taxonomy="' . esc_attr( $taxonomy->name ) . '">' . esc_html( $term->name ) . '</a></li>';
 							}
 					}
 			}
@@ -77,14 +77,19 @@ function display_all_projects($args = array()) {
 					$escaped_title = esc_attr($title);
 					$permalink = get_the_permalink(); // Get the URL of the project
 
-					$html .= '<div class="project-tile-container">';
-					$html .= '<a href="' . esc_url($permalink) . '" title="' . $escaped_title . '">';
-					$html .= $thumbnail_html; // Include the thumbnail within the link
-					$html .= '</a>';
-					$html .= '<div class="overlay">';
-					$html .= '<h2>' . esc_html($title) . '</h2>';
+					$html .= '<div class="project-card-container">';
+					$html .= '  <div class="project-card">';
+					$html .= '    <div class="card-content">';
+					$html .= '      <h1 class="card-title">' . esc_html($title) . '</h1>';
+					$html .= '    </div>';
+					$html .= '    <div class="card-image">';
+					$html .= '      <a href="' . esc_url($permalink) . '" title="' . esc_attr($escaped_title) . '">';
+					$html .= '        ' . $thumbnail_html; // Include the thumbnail within the link
+					$html .= '      </a>';
+					$html .= '    </div>';
+					$html .= '  </div>';
 					$html .= '</div>';
-					$html .= '</div>';
+
 			}
 	} else {
 			$html .= '<p>No projects found.</p>';
@@ -225,8 +230,6 @@ function filter_projects_by_taxonomy_shortcode() {
 
 add_shortcode('filter_projects', 'filter_projects_by_taxonomy_shortcode');
 
-
-
 function display_project_features() {
 	// Ensure this is a single project page
 	if ( ! is_singular( 'project' ) ) {
@@ -270,6 +273,44 @@ function display_project_features() {
 add_shortcode( 'project_features', 'display_project_features' );
 
 
+function display_service_skills() {
+	// Ensure this is a single project page
+	if ( ! is_singular( 'service' ) ) {
+			return '<p>This is not a service page.</p>';
+	}
+	// Get the current post ID
+	global $post;
+	$post_id = $post->ID;
+	// Verify taxonomy and post type
+	$taxonomies = get_object_taxonomies( 'service', 'names' );
+	if ( ! in_array( 'skill', $taxonomies ) ) {
+			return '<p>The taxonomy "skills" is not registered for this post typeeee.</p>';
+	}
+	// Get terms from the 'features' taxonomy for the current project
+	$terms = get_the_terms( $post_id, 'skill' );
+
+	if ( $terms && ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+			$html = '<div>';
+			$html .= '<ul class="pills">';
+
+			foreach ( $terms as $term ) {
+					// Output each term
+					$html .= '<li class="pill-outline">';
+					$html .= esc_html( $term->name );
+					$html .= '</li>';
+			}
+
+			$html .= '</ul>';
+			$html .= '</div>';
+	} else {
+			$html = '<p>No features found.</p>';
+	}
+	return $html;
+}
+
+add_shortcode( 'service_skills', 'display_service_skills' );
+
+
 function project_link_button_shortcode() {
 	// Get the ACF field value for 'project_link'
 	$project_link = get_field('project_link');
@@ -286,3 +327,48 @@ function project_link_button_shortcode() {
 
 // Register the shortcode with WordPress
 add_shortcode('project_link_button', 'project_link_button_shortcode');
+
+
+// Register block type
+function register_acf_service_image_block() {
+	register_block_type('my-plugin/acf-service-image', array(
+			'render_callback' => 'render_acf_service_image_block',
+	));
+}
+add_action('init', 'register_acf_service_image_block');
+
+// Block rendering callback
+function render_acf_service_image_block($attributes) {
+	// Get current post ID
+	$post_id = get_the_ID();
+
+	// Get the ACF field
+	$service_image = get_field('service_image', $post_id);
+
+	if ($service_image) {
+			if (is_array($service_image) && isset($service_image['url'])) {
+					return '<img src="' . esc_url($service_image['url']) . '" alt="' . esc_attr($service_image['alt']) . '" />';
+			}
+	}
+
+	return '<p>No service image found for this post.</p>';
+}
+
+// Register the shortcode
+function display_acf_service_image_shortcode($atts) {
+	$atts = shortcode_atts(array(
+			'post_id' => get_the_ID(), // Default to current post ID
+	), $atts, 'service_image');
+
+	// Get ACF field for the given post ID
+	$service_image = get_field('service_image', $atts['post_id']);
+
+	if ($service_image) {
+			if (is_array($service_image) && isset($service_image['url'])) {
+					return '<img src="' . esc_url($service_image['url']) . '" alt="' . esc_attr($service_image['alt']) . '" />';
+			}
+	}
+
+	return '<p>No service image found for post ID: ' . esc_html($atts['post_id']) . '.</p>';
+}
+add_shortcode('service_image', 'display_acf_service_image_shortcode');

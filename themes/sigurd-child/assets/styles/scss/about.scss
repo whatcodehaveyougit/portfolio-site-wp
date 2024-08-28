@@ -1,0 +1,9 @@
+@import './variables.scss';
+
+.about-container {
+  h3 {
+    span {
+      color: $primary-blue;
+    }
+  }
+}
