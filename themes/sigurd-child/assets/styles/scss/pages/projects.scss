@@ -1,7 +1,21 @@
+@import '../variables.scss';
+
 .projects-page-container {
   .taxonomy-term-link:focus {
     outline: none;
   }
+  .project-card-link {
+    text-decoration: none;
+  }
+  .project-card-link:hover {
+    text-decoration: underline;
+  }
+
+  outline: none; /* Removes the default focus outline */
+  border: none; /* Removes any border that may appear */
+  box-shadow: none; /* Removes any box-shadow */
+  text-decoration: none; /* Removes underline from links */
+
   .projects-container {
     // display: grid;
     // grid-template-columns: 1fr 1fr 1fr;
@@ -31,5 +45,15 @@
     border-radius: 8px; /* Rounded corners for the card */
     padding: 1rem; /* Padding inside the card */
     box-shadow: 0 2px 4px rgba;
+    text-decoration: none;
+    h1 {
+      margin: 0px;
+    }
+    ul {
+      padding: 0px;
+    }
+    p {
+      color: $medium-grey;
+    }
   }
 }

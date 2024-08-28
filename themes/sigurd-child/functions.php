@@ -57,6 +57,38 @@ function get_all_taxonomy_terms_for_post_type() {
 	return $html;
 }
 
+function render_project_card($post_id) {
+	$thumbnail_html = get_the_post_thumbnail($post_id, 'medium');
+	$title = get_the_title($post_id);
+	$description = get_field('project_description', $post_id);
+	$escaped_title = esc_attr($title);
+	$permalink = get_the_permalink($post_id);
+	$features = get_the_terms($post_id, 'feature'); // Replace 'feature' with your actual taxonomy slug
+
+	$html = '<div class="project-card-container">';
+	$html .= '  <a href="' . esc_url($permalink) . '" title="' . esc_attr($escaped_title) . '" class="project-card-link">';
+	$html .= '    <div class="project-card">';
+	$html .= '      <div class="card-content">';
+	$html .= '        <h1 class="card-title">' . esc_html($title) . '</h1>';
+
+	if ($features && !is_wp_error($features)) {
+			$html .= '        <ul class="features-list">';
+			foreach ($features as $feature) {
+					$html .= '          <li class="pill-outline">' . esc_html($feature->name) . '</li>';
+			}
+			$html .= '        </ul>';
+	}
+	$html .= '<p>' . esc_html($description) . '</p>';
+	$html .= '      </div>';
+	$html .= '      <div class="card-image">';
+	$html .= '        ' . $thumbnail_html;
+	$html .= '      </div>';
+	$html .= '    </div>';
+	$html .= '  </a>';
+	$html .= '</div>';
+
+	return $html;
+}
 
 function display_all_projects($args = array()) {
 	$default_args = array(
@@ -65,41 +97,46 @@ function display_all_projects($args = array()) {
 	);
 	$query_args = wp_parse_args($args, $default_args);
 
-	$query = new WP_Query($query_args);
+	// Define an array of post IDs to display first
+	$specific_post_ids = array(133, 138); // Replace with the actual post IDs you want to prioritize
+
+	// Query to get projects with the specific IDs first
+	$specific_query_args = array_merge($query_args, array(
+			'post__in' => $specific_post_ids, // Query for posts with specific IDs
+			'orderby' => 'post__in', // Ensure the order of results matches the order of IDs in the array
+	));
+	$specific_query = new WP_Query($specific_query_args);
+
+	// Collect IDs of projects with specific IDs
+	$exclude_ids = array();
+	if ($specific_query->have_posts()) {
+			while ($specific_query->have_posts()) {
+					$specific_query->the_post();
+					$exclude_ids[] = get_the_ID(); // Collect IDs of projects with the specific IDs
+			}
+	}
+
+	// Query to get all other projects excluding the specific ones
+	$remaining_query_args = array_merge($query_args, array(
+			'post__not_in' => $exclude_ids
+	));
+	$remaining_query = new WP_Query($remaining_query_args);
+
 	$html = '';
 
-	if ($query->have_posts()) {
-			while ($query->have_posts()) {
-					$query->the_post();
-					$thumbnail_html = get_the_post_thumbnail(get_the_ID(), 'medium');
-					$title = get_the_title();
-					$escaped_title = esc_attr($title);
-					$permalink = get_the_permalink(); // Get the URL of the project
-					// Get the terms for the 'features' taxonomy
-					$features = get_the_terms(get_the_ID(), 'feature'); // Replace 'features' with your actual taxonomy slug
+	// Display projects with the specific IDs
+	if ($specific_query->have_posts()) {
+			while ($specific_query->have_posts()) {
+					$specific_query->the_post();
+					$html .= render_project_card(get_the_ID());
+			}
+	}
 
-					$html .= '<div class="project-card-container">';
-					$html .= '  <a href="' . esc_url($permalink) . '" title="' . esc_attr($escaped_title) . '" class="project-card-link">'; // Anchor tag wrapping the whole card
-					$html .= '    <div class="project-card">';
-					$html .= '      <div class="card-content">';
-					$html .= '        <h1 class="card-title">' . esc_html($title) . '</h1>';
-
-					// Check if there are any terms and display them as a list
-					if ($features && !is_wp_error($features)) {
-							$html .= '        <ul class="features-list">';
-							foreach ($features as $feature) {
-									$html .= '          <li>' . esc_html($feature->name) . '</li>';
-							}
-							$html .= '        </ul>';
-					}
-
-					$html .= '      </div>';
-					$html .= '      <div class="card-image">';
-					$html .= '        ' . $thumbnail_html; // The image directly within the card
-					$html .= '      </div>';
-					$html .= '    </div>';
-					$html .= '  </a>'; // Closing anchor tag
-					$html .= '</div>';
+	// Display remaining projects
+	if ($remaining_query->have_posts()) {
+			while ($remaining_query->have_posts()) {
+					$remaining_query->the_post();
+					$html .= render_project_card(get_the_ID());
 			}
 	} else {
 			$html .= '<p>No projects found.</p>';
@@ -109,6 +146,7 @@ function display_all_projects($args = array()) {
 
 	return $html;
 }
+
 
 
 
@@ -263,12 +301,12 @@ function display_project_features() {
 	$terms = get_the_terms( $post_id, 'feature' );
 
 	if ( $terms && ! is_wp_error( $terms ) && ! empty( $terms ) ) {
-			$html = '<div class="project-features">';
+			$html = '<div class="">';
 			$html .= '<ul>';
 
 			foreach ( $terms as $term ) {
 					// Output each term
-					$html .= '<li>';
+					$html .= '<li class="pill-outline">';
 					$html .= '<a href="' . esc_url( get_term_link( $term ) ) . '">' . esc_html( $term->name ) . '</a>';
 					$html .= '</li>';
 			}
@@ -331,9 +369,9 @@ function project_link_button_shortcode() {
 	if ($project_link) {
 			// Return button HTML
 			return '<a href="' . esc_url($project_link) . '"
-			class="wp-block-button__link has-contrast-color has-text-color project-link-btn has-link-color wp-element-button"
+			class="wp-block-button__link has-text-color project-link-btn has-link-color wp-element-button"
 			target="_blank"
-			rel="noopener noreferrer">Open Project<img src="http://localhost:10018/wp-content/themes/sigurd-child/assets/svgs/open.svg" /></a>';
+			rel="noopener noreferrer">Open Project<img src="http://localhost:10018/wp-content/themes/sigurd-child/assets/svgs/open1.svg" /></a>';
 	}
 }
 

@@ -1,5 +1,20 @@
+.projects-page-container {
+  box-shadow: none;
+  border: none;
+  outline: none;
+  text-decoration: none;
+}
+
 .projects-page-container .taxonomy-term-link:focus {
   outline: none;
+}
+
+.projects-page-container .project-card-link {
+  text-decoration: none;
+}
+
+.projects-page-container .project-card-link:hover {
+  text-decoration: underline;
 }
 
 .projects-page-container .projects-container {
@@ -29,14 +44,27 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+  text-decoration: none;
   display: flex;
 }
 
-.project-page .project-features ul {
+.projects-page-container .project-card h1 {
+  margin: 0;
+}
+
+.projects-page-container .project-card ul {
   padding: 0;
 }
 
-.project-page .project-features ul li {
+.projects-page-container .project-card p {
+  color: #626262;
+}
+
+.single-project .project-page-header ul, .single-project .project-features ul {
+  padding: 0;
+}
+
+.single-project .project-features ul li {
   border: 1px solid var(--Light-Medium-Grey, #d4d4d4);
   opacity: var(--sds-size-stroke-border);
   border-radius: 4px;
@@ -45,7 +73,7 @@
   display: inline-block;
 }
 
-.project-page .project-features ul li a {
+.single-project .project-features ul li a {
   color: var(--Dark-Grey, #171717);
   font-family: var(--wp--preset--font-family--inter-18-pt);
   font-size: 16px;
@@ -55,12 +83,26 @@
   text-decoration: none;
 }
 
-.project-page .header {
+.single-project .header {
   align-items: flex-start;
 }
 
-.project-page .project-link-btn {
-  background: var(--Primary-Blue, #004eaa);
+.single-project .project-link-btn {
+  color: #fff;
+  background: #004eaa;
+  align-items: center;
+  display: flex;
+}
+
+.single-project .project-link-btn img {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.single-project .wp-block-post-featured-image img {
+  border-radius: 0;
+  max-height: 265px;
 }
 
 .services-page-container .service-block {
@@ -247,6 +289,10 @@ ul.taxonomy-pills {
   margin: 0;
   font-family: Junge;
   font-size: 80px;
+}
+
+.big-numbers-container .wp-block-column {
+  border-right: 1px solid #fff;
 }
 
 .big-numbers-container .wp-block-columns {

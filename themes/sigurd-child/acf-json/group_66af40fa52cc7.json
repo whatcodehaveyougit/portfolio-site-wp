@@ -23,6 +23,26 @@
             "append": ""
         },
         {
+            "key": "field_66cf6f22dec22",
+            "label": "Project Description",
+            "name": "project_description",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_66bcf9de00642",
             "label": "Project Image",
             "name": "project_image",
@@ -106,5 +126,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1724427234
+    "modified": 1724870457
 }

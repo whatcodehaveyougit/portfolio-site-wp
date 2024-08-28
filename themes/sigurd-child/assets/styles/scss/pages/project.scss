@@ -1,4 +1,11 @@
-.project-page {
+@import '../variables.scss';
+
+.single-project {
+  .project-page-header {
+    ul {
+      padding: 0px;
+    }
+  }
   .project-features ul {
     padding: 0px;
     li {
@@ -25,6 +32,18 @@
     align-items: flex-start;
   }
   .project-link-btn {
-    background: var(--Primary-Blue, #004eaa);
+    background: $primary-blue;
+    color: white;
+    display: flex;
+    align-items: center;
+    img {
+      height: 20px;
+      width: 20px;
+      margin-left: 10px;
+    }
+  }
+  .wp-block-post-featured-image img {
+    max-height: 265px;
+    border-radius: 0px;
   }
 }
