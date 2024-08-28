@@ -58,7 +58,6 @@ function get_all_taxonomy_terms_for_post_type() {
 }
 
 
-// Correct one that is not doing the right link
 function display_all_projects($args = array()) {
 	$default_args = array(
 			'post_type' => 'project',
@@ -76,20 +75,31 @@ function display_all_projects($args = array()) {
 					$title = get_the_title();
 					$escaped_title = esc_attr($title);
 					$permalink = get_the_permalink(); // Get the URL of the project
+					// Get the terms for the 'features' taxonomy
+					$features = get_the_terms(get_the_ID(), 'feature'); // Replace 'features' with your actual taxonomy slug
 
 					$html .= '<div class="project-card-container">';
-					$html .= '  <div class="project-card">';
-					$html .= '    <div class="card-content">';
-					$html .= '      <h1 class="card-title">' . esc_html($title) . '</h1>';
-					$html .= '    </div>';
-					$html .= '    <div class="card-image">';
-					$html .= '      <a href="' . esc_url($permalink) . '" title="' . esc_attr($escaped_title) . '">';
-					$html .= '        ' . $thumbnail_html; // Include the thumbnail within the link
-					$html .= '      </a>';
-					$html .= '    </div>';
-					$html .= '  </div>';
-					$html .= '</div>';
+					$html .= '  <a href="' . esc_url($permalink) . '" title="' . esc_attr($escaped_title) . '" class="project-card-link">'; // Anchor tag wrapping the whole card
+					$html .= '    <div class="project-card">';
+					$html .= '      <div class="card-content">';
+					$html .= '        <h1 class="card-title">' . esc_html($title) . '</h1>';
 
+					// Check if there are any terms and display them as a list
+					if ($features && !is_wp_error($features)) {
+							$html .= '        <ul class="features-list">';
+							foreach ($features as $feature) {
+									$html .= '          <li>' . esc_html($feature->name) . '</li>';
+							}
+							$html .= '        </ul>';
+					}
+
+					$html .= '      </div>';
+					$html .= '      <div class="card-image">';
+					$html .= '        ' . $thumbnail_html; // The image directly within the card
+					$html .= '      </div>';
+					$html .= '    </div>';
+					$html .= '  </a>'; // Closing anchor tag
+					$html .= '</div>';
 			}
 	} else {
 			$html .= '<p>No projects found.</p>';
@@ -99,6 +109,8 @@ function display_all_projects($args = array()) {
 
 	return $html;
 }
+
+
 
 
 
