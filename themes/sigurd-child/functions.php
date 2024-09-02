@@ -209,6 +209,7 @@ function filter_projects_by_taxonomy_shortcode() {
 
 					// Add active class to the clicked taxonomy term
 					$(this).addClass("active");
+					console.log(this);
 
 					$.ajax({
 							url: "' . admin_url('admin-ajax.php') . '",

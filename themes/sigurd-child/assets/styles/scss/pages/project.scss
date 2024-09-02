@@ -1,6 +1,9 @@
 @import '../variables.scss';
 
 .single-project {
+  .header {
+    flex-wrap: wrap;
+  }
   .project-page-header {
     ul {
       padding: 0px;

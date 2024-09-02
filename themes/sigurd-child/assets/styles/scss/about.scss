@@ -6,4 +6,9 @@
       color: $primary-blue;
     }
   }
+  @media (min-width: 400px) {
+    .wp-block-image {
+      float: right;
+    }
+  }
 }

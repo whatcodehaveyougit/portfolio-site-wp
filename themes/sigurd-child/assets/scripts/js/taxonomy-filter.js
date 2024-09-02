@@ -7,8 +7,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const termId = this.getAttribute('data-term-id');
             const taxonomy = this.getAttribute('data-taxonomy');
-
             const projectsContainer = document.querySelector('.projects-container');
+
+            projectsContainer.classList.add('fade-out');
+                // Remove the 'active' class from all links
+                termLinks.forEach(function(link) {
+                link.classList.remove('active');
+            });
+            this.classList.add('active');
+
 
             // Add fade-out class to start fading out
             projectsContainer.classList.add('fade-out');
@@ -53,3 +60,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
