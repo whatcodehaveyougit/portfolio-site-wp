@@ -2,4 +2,9 @@
 /uploads-webpc
 /ai1wm-backups
 /themes/sigurd-child/node_modules
-/plugins
+# Ignore everything in the /plugins/ directory
+/plugins/*
+# Unignore the specific /plugins/theme-customizations folder
+!/plugins/theme-customizations/
+# Unignore files and subdirectories inside theme-customizations if needed
+!/plugins/theme-customizations/**

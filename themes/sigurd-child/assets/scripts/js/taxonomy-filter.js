@@ -9,13 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const taxonomy = this.getAttribute('data-taxonomy');
             const projectsContainer = document.querySelector('.projects-container');
 
-            projectsContainer.classList.add('fade-out');
-                // Remove the 'active' class from all links
-                termLinks.forEach(function(link) {
+            // Remove the 'active' class from all links
+            termLinks.forEach(function(link) {
                 link.classList.remove('active');
             });
             this.classList.add('active');
-
 
             // Add fade-out class to start fading out
             projectsContainer.classList.add('fade-out');
@@ -47,6 +45,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Remove fade-out class and add fade-in class to start fading in
                     projectsContainer.classList.remove('fade-out');
                     projectsContainer.classList.add('fade-in');
+
+                    // Remove fade-in class after transition to reset state
+                    setTimeout(() => {
+                        projectsContainer.classList.remove('fade-in');
+                    }, 300); // Timeout should match the CSS transition duration
                 })
                 .catch(function(error) {
                     console.log('AJAX Error:', error);
@@ -55,9 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Remove fade-out class and add fade-in class
                     projectsContainer.classList.remove('fade-out');
                     projectsContainer.classList.add('fade-in');
+
+                    // Remove fade-in class after transition to reset state
+                    setTimeout(() => {
+                        projectsContainer.classList.remove('fade-in');
+                    }, 300); // Timeout should match the CSS transition duration
                 });
-            }, 300); // Timeout should match the CSS transition duration (300ms)
+            }, 300); // Timeout should match the CSS transition duration
         });
     });
 });
-

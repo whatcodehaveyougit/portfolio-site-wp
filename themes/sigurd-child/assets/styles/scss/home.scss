@@ -1,6 +1,10 @@
 @import './variables.scss';
 
 .services-container {
+  // Basic styling for the container
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
   .wp-block-column {
     border: 1px solid $light-grey;
     height: 100%;
@@ -15,11 +19,6 @@
       flex-direction: column;
     }
   }
-  // Basic styling for the container
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-
   h2 {
     text-align: center;
     margin-bottom: 30px;
