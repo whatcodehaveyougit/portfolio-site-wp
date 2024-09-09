@@ -5,3 +5,63 @@
  */
 
 
+ @media (min-width: 991px){
+  .wp-block-post-featured-image {
+      display: flex;
+  }
+ .single-project .wp-block-post-featured-image img {
+  border-radius: 0;
+  width: 1000px;
+  margin: auto;
+}
+}
+
+.wp-block-post-featured-image {
+  max-height: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.wp-block-post-featured-image img {
+  max-height: 300px;
+  width: auto !important;
+}
+
+.about-container img {
+  padding: 20px;
+}
+
+.about-container figure {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 767px){
+  .about-container > figure {
+  display: inline-block !important;
+  float: right !important;
+  width: auto;
+}
+}
+
+.articles-container .wp-block-query {
+  width: 80%;
+  margin: auto;
+}
+
+.entry-content > .wp-block-group {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.wp-container-core-group-is-layout-7 > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  max-width: 100%;
+}
+
+.project-page-header .is-layout-flex {
+  gap: 0px;
+}
+
+.project-page-header ul {
+  margin-top: 5px;
+}
