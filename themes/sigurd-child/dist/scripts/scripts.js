@@ -585,8 +585,9 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"5C2sm":[function(require,module,exports) {
 var _taxonomyFilterJs = require("./js/taxonomy-filter.js");
+var _generalJs = require("./js/general.js");
 
-},{"./js/taxonomy-filter.js":"cnXGo"}],"cnXGo":[function(require,module,exports) {
+},{"./js/taxonomy-filter.js":"cnXGo","./js/general.js":"aoUsD"}],"cnXGo":[function(require,module,exports) {
 document.addEventListener("DOMContentLoaded", function() {
     const termLinks = document.querySelectorAll(".taxonomy-term-link");
     termLinks.forEach(function(link) {
@@ -595,6 +596,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const termId = this.getAttribute("data-term-id");
             const taxonomy = this.getAttribute("data-taxonomy");
             const projectsContainer = document.querySelector(".projects-container");
+            projectsContainer.classList.add("fade-out");
+            // Remove the 'active' class from all links
+            termLinks.forEach(function(link) {
+                link.classList.remove("active");
+            });
+            this.classList.add("active");
             // Add fade-out class to start fading out
             projectsContainer.classList.add("fade-out");
             // Use a timeout to wait for the fade-out transition to complete
@@ -627,6 +634,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             }, 300); // Timeout should match the CSS transition duration (300ms)
         });
+    });
+});
+
+},{}],"aoUsD":[function(require,module,exports) {
+document.addEventListener("DOMContentLoaded", function() {
+    // Find the site title element
+    var siteTitle = document.querySelector(".site-headings");
+    console.log("heloo");
+    // Check if the element exists
+    if (siteTitle) // Add a click event listener
+    siteTitle.addEventListener("click", function(event) {
+        // Prevent the default behavior if any
+        event.preventDefault();
+        // Open the link in the same tab
+        window.location.href = window.location.origin;
     });
 });
 

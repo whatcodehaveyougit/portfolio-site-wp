@@ -1,4 +1,7 @@
 .services-page-container {
+  position: relative;
+  width: calc(100% + 40px);
+  left: -20px;
   .service-block {
     padding-bottom: 2rem;
     border-bottom: 1px solid black;

@@ -1,24 +1,25 @@
 @import '../variables.scss';
 
 .projects-page-container {
-  .taxonomy-term-link:focus {
-    outline: none;
-  }
-  .project-card-link {
-    text-decoration: none;
-  }
-  .project-card-link:hover {
-    text-decoration: underline;
-  }
-
   outline: none; /* Removes the default focus outline */
   border: none; /* Removes any border that may appear */
   box-shadow: none; /* Removes any box-shadow */
   text-decoration: none; /* Removes underline from links */
 
+  .taxonomy-term-link:focus {
+    outline: none;
+  }
+  .pill-outline:has(.taxonomy-term-link.active) {
+    background-color: $primary-blue;
+    border: none;
+    a {
+      color: white;
+    }
+  }
+  .project-card-link {
+    text-decoration: none;
+  }
   .projects-container {
-    // display: grid;
-    // grid-template-columns: 1fr 1fr 1fr;
     transition: opacity 0.5s ease-in-out; /* Change 0.5s to your desired duration */
     opacity: 1;
   }
@@ -54,6 +55,18 @@
     }
     p {
       color: $medium-grey;
+    }
+  }
+  .project-card:hover {
+    background-color: $hover-grey;
+  }
+  @media screen and (max-width: 768px) {
+    .project-card {
+      display: block;
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
   }
 }

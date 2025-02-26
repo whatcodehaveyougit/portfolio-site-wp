@@ -30,9 +30,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Ai1wm_Import_Compatibility {
 
 	public static function execute( $params ) {
+		do_action( 'ai1wm_status_import_start', $params );
 
 		// Set progress
-		Ai1wm_Status::info( __( 'Checking extensions compatibility...', AI1WM_PLUGIN_NAME ) );
+		Ai1wm_Status::info( __( 'Checking for compatibility...', AI1WM_PLUGIN_NAME ) );
 
 		// Get messages
 		$messages = Ai1wm_Compatibility::get( $params );
