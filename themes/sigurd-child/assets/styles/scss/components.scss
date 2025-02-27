@@ -147,9 +147,6 @@ ul.taxonomy-pills {
 }
 
 .contact-us-container {
-  position: relative;
-  width: calc(100% + 40px);
-  left: -20px;
   .wp-block-columns .wp-block-column:nth-child(2) {
     display: flex;
     justify-content: flex-end;
@@ -173,11 +170,8 @@ ul.taxonomy-pills {
 }
 
 .the-process-component {
-  position: relative;
-  width: calc(100% + 40px);
-  left: -20px;
-  h3,
-  h5 {
+  h3.wp-block-heading,
+  h5.wp-block-heading {
     color: white;
   }
   padding: $space-3;

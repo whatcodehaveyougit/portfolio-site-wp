@@ -49,11 +49,6 @@
   margin: auto;
 }
 
-.entry-content > .wp-block-group {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-}
-
 .wp-container-core-group-is-layout-7 > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
   max-width: 100%;
 }
